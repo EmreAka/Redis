@@ -1,3 +1,6 @@
+using Microsoft.Extensions.Caching.Distributed;
+using WebAPI.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
@@ -28,9 +31,15 @@ User[] users = new[]
 
 var userGroup = app.MapGroup("users").WithTags("Users");
 
-userGroup.MapGet("/", async () =>
+userGroup.MapGet("/", async (IDistributedCache distributedCache) =>
 {
+    var cache = await distributedCache.GetRecordAsync<User[]>("Users");
+    if (cache is not null) return Results.Ok(cache);
+    
     await Task.Delay(2500);
+
+    await distributedCache.SetRecordAsync<User[]>("Users", users, TimeSpan.FromMinutes(10));
+    
     return Results.Ok(users);
 });
 
