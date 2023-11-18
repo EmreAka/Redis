@@ -5,6 +5,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.InstanceName = "Redis_Demo_";
 });
 
 var app = builder.Build();
