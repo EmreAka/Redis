@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Caching.Distributed;
+using StackExchange.Redis;
 using WebAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,4 +46,4 @@ userGroup.MapGet("/", async (IDistributedCache distributedCache) =>
 
 app.Run();
 
-internal record class User(int Id, string FullName, string Email, string Username);
+internal record User(int Id, string FullName, string Email, string Username);
